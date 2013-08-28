@@ -1,16 +1,16 @@
-#include <iostream.h>
-#include <string.h>
+#include <iostream>
+#include <string>
+#include <cassert>
 using namespace std;
 
 class Container
 {
-	union
-	{
-		string str;
-		int val;
-	};
-	bool is_val;
+private:
+	string str;
+	int val;
+	bool is_string;
 
+public:
 	Container(string str);
 	Container(int val);
 
@@ -18,21 +18,33 @@ class Container
 	operator string();
 };
 
-Container::Container(string str) : str(str), is_val(false)
-{
-
-}
-Container::Container(int val) : val(val), is_val(true)
+Container::Container(string str) : str(str), is_string(true)
 {
 
 }
 
-Container Container:chain(int val)
+Container::Container(int val) : val(val), is_string(false)
 {
+
+}
+
+Container Container::chain(int val)
+{
+	assert(!is_string);
 	if(this->val > val)
+	{
 		return Container("Hello");
+	}
 	else
+	{
 		return Container(val+1);
+	}
+}
+
+Container::operator string()
+{
+	assert(is_string);
+	return str;	
 }
 	
 Container chain(int val)
@@ -40,7 +52,12 @@ Container chain(int val)
 	return Container(val);
 }
 
+void foo(string str)
+{
+	cout<<str<<endl;
+}
+
 int main()
 {
-	cout<<chain(2).chain(1)<<endl;
+	foo(chain(2).chain(1));
 }
